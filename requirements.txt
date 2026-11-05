@@ -3,7 +3,6 @@ numpy>=2.0
 pyarrow>=16
 duckdb>=1.1
 scikit-learn>=1.5
-lightgbm>=4.3
 lifelines>=0.29
 statsmodels>=0.14
 matplotlib>=3.9

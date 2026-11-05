@@ -57,6 +57,10 @@ with today's run-to-failure approach and with a simple fixed-age rule?
   weights so each vehicle counts equally) -- explain the choice before the code.
 - Features may only use readouts at or before the prediction point (no look-ahead).
   Counters are mostly cumulative: use differences/rates, not just levels.
+- Models: (a) multinomial logistic regression (interpretable) and (b) gradient boosting
+  with scikit-learn's `HistGradientBoostingClassifier` (multiclass, handles NaN natively,
+  `class_weight` or sample weights for imbalance). Don't use LightGBM/XGBoost: keep the
+  stack scikit-learn only, with no extra native runtime dependencies.
 - Class probabilities must be checked for calibration before they feed the
   expected-cost decision rule.
 - Every modelling choice (feature, transform, sampling, model, threshold, why) gets a

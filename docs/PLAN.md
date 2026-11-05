@@ -68,7 +68,7 @@ built in DuckDB with window functions, which is close to how fleet data is handl
 |---|---|---|---|
 | 01 EDA | What does the fleet and its data look like? | Readouts per truck, sampling irregularity, repair vs censored, spec mix, counter trajectories before repair vs healthy, histogram summaries | Data-quality table, "what changes before a repair" figure |
 | 02 Reliability | How does Component X fail over its life? | Kaplan–Meier (overall, by Spec), log-rank tests, Weibull fit (shape > 1 = wear-out, so preventive repair is worth doing), Cox PH with specs and early-life usage rates, PH check | Survival curves, hazard ratios, **fixed-age rule baseline** chosen to minimise cost on validation |
-| 03 Risk model | Given a truck's readouts so far, how close is it to repair? | Vehicle-level prediction points; group-by-vehicle CV; (a) multinomial logistic / discrete-time hazard (interpretable), (b) LightGBM multiclass; calibration check; SHAP for drivers | Calibrated P(class 0..4) per truck, model comparison on validation |
+| 03 Risk model | Given a truck's readouts so far, how close is it to repair? | Vehicle-level prediction points; group-by-vehicle CV; (a) multinomial logistic / discrete-time hazard (interpretable), (b) scikit-learn HistGradientBoostingClassifier (multiclass); calibration check; SHAP for drivers | Calibrated P(class 0..4) per truck, model comparison on validation |
 | 04 Policy | What should the planner do, and what is it worth? | Bayes decision rule: pick the action with the lowest expected cost, Σ P(actual) × COST[actual][action]; compare with the two baselines; sensitivity to the cost ratio and to workshop capacity (top-K call-ins); **one-time test evaluation** | Policy table (cost per 1,000 trucks, repairs caught, unnecessary call-ins), sensitivity curves, test-set "fleet snapshot" service list |
 
 ## Power BI dashboard (5 pages)
@@ -147,7 +147,7 @@ baselines in docs/PLAN.md. Commit.
 ```
 Create notebooks/03_risk_model.ipynb. Build training prediction points that mimic validation
 (explain the sampling/weighting choice first). Group-by-vehicle CV. Fit (a) multinomial logistic
-regression with standardized features and (b) LightGBM multiclass with class weights. Compare on
+regression with standardized features and (b) HistGradientBoostingClassifier (multiclass) with class weights. Compare on
 validation: challenge cost using argmax AND using the expected-cost rule, macro-F1, per-class
 recall. Check calibration and recalibrate if needed. SHAP for the chosen model, phrased with
 anonymized variable names. Do not touch test. Save scores and drivers to data/processed/. Commit.
