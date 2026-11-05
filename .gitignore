@@ -1,0 +1,14 @@
+# large or rebuildable data
+data/raw/
+data/*.duckdb
+data/*.duckdb.wal
+data/processed/*.parquet
+
+# python / jupyter
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+
+# Power BI local cache
+powerbi/**/.pbi/localSettings.json
+powerbi/**/.pbi/cache.abf
